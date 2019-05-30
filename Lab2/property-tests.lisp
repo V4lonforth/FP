@@ -7,19 +7,27 @@
 
 (plan 3)
 
-;Associative property of merge operation
-;(a + b) + c = a + (b + c)
-(let ((a (tree '(1 2 3 4)))
-      (b (tree '(4 5 6 7)))
-      (c (tree '(7 8 9 10))))
-      (ok 
-        (compare-trees 
-          (merge-trees (merge-trees a b) c)
-          (merge-trees a (merge-trees b c)))))
+(defun gen-tree(count max-value)
+  (tree (loop for i from 1 to count
+    collect (random max-value))))
 
-;Is structure a monoid
-;ex = x = xe
-(let ((a (tree '(1 2 3 4 5))))
+(let ((a (gen-tree 100 100000))
+      (b (gen-tree 100 100000))
+      (c (gen-tree 100 100000)))
+
+  ;Associative property of merge operation
+  ;(a + b) + c = a + (b + c)
+  (ok 
+    (compare-trees 
+      (merge-trees (merge-trees a b) c)
+      (merge-trees a (merge-trees b c))))
+  
+  ;Are keys unqiue
+  ;a + a = a
+  (ok (compare-trees a (merge-trees a a)))
+
+  ;Is structure a monoid
+  ;ex = x = xe
   (is
     (compare-trees
       (merge-trees a nil)
@@ -27,12 +35,5 @@
     (compare-trees
       (merge-trees nil a)
       a)))
-
-;Are keys unqiue
-;a + a = a
-(let ((a (tree 
-  (loop for i from 1 to 100
-    collect (random 10000)))))
-  (ok (compare-trees a (merge-trees a a))))
 
 (finalize)

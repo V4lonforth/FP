@@ -112,8 +112,12 @@
       (cond 
         ((null value) node)
         ((null node) (node value))
-        ((< value (get-key node)) (node (get-key node) (add-node-rec (get-left node) value) (get-right node)))
-        ((> value (get-key node)) (node (get-key node) (get-left node) (add-node-rec (get-right node) value)))
+        ((< value (get-key node)) (node (get-key node) 
+                                        (add-node-rec (get-left node) value) 
+                                        (get-right node)))
+        ((> value (get-key node)) (node (get-key node) 
+                                        (get-left node) 
+                                        (add-node-rec (get-right node) value)))
         (t node))))
       (add-node-rec node value))))
 
@@ -154,8 +158,12 @@
       (cond
         ((null value) node)
         ((null node) node)
-        ((< value (get-key node)) (node (get-key node) (remove-node-rec (get-left node) value) (get-right node)))
-        ((> value (get-key node)) (node (get-key node) (get-left node) (remove-node-rec (get-right node) value)))
+        ((< value (get-key node)) (node (get-key node) 
+                                        (remove-node-rec (get-left node) value) 
+                                        (get-right node)))
+        ((> value (get-key node)) (node (get-key node) 
+                                        (get-left node) 
+                                        (remove-node-rec (get-right node) value)))
         (t (if (null (get-left node))
           (if (null (get-right node))
             nil
